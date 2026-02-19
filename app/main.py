@@ -12,22 +12,22 @@ class Ship:
             end: tuple,
             is_drowned: bool = False
     ) -> None:
-        if start[0] == end[0] and start[1] <= end[1]:
-            self.decks = [
-                Deck(start[0], i) for i in range(start[1], end[1] + 1)
-            ]
-        elif start[0] == end[0] and start[1] > end[1]:
-            self.decks = [
-                Deck(start[0], i) for i in range(end[1], start[1] + 1)
-            ]
-        elif start[1] == end[1] and start[0] <= end[0]:
-            self.decks = [
-                Deck(i, start[1]) for i in range(start[0], end[0] + 1)
-            ]
-        elif start[1] == end[1] and start[0] > end[0]:
-            self.decks = [
-                Deck(i, start[1]) for i in range(end[0], start[0] + 1)
-            ]
+        if start[0] != end[0] and start[1] != end[1]:
+            raise ValueError("Ship must be placed horizontally or vertically")
+        for coord in (start, end):
+            if not (0 <= coord[0] <= 9 and 0 <= coord[1] <= 9):
+                raise ValueError("Ship coordinates must be between 0 and 9")
+        if start[0] == end[0]:
+            row = start[0]
+            col_start = min(start[1], end[1])
+            col_end = max(start[1], end[1])
+            self.decks = [Deck(row, c) for c in range(col_start, col_end + 1)]
+        else:
+            col = start[1]
+            row_start = min(start[0], end[0])
+            row_end = max(start[0], end[0])
+            self.decks = [Deck(r, col) for r in range(row_start, row_end + 1)]
+
         self.is_drowned = is_drowned
 
     def get_deck(self, row: int, column: int) -> Deck | None:
@@ -64,5 +64,4 @@ class Battleship:
         ship.fire(location[0], location[1])
         if ship.is_drowned:
             return "Sunk!"
-        else:
-            return "Hit!"
+        return "Hit!"

@@ -13,10 +13,10 @@ class Ship:
             is_drowned: bool = False
     ) -> None:
         if start[0] != end[0] and start[1] != end[1]:
-            raise ValueError("Ship must be placed horizontally or vertically")
+            raise ValueError("Ship must be placed horizontally or vertically!")
         for coord in (start, end):
             if not (0 <= coord[0] <= 9 and 0 <= coord[1] <= 9):
-                raise ValueError("Ship coordinates must be between 0 and 9")
+                raise ValueError("Ship coordinates must be between 0 and 9!")
         if start[0] == end[0]:
             row = start[0]
             col_start = min(start[1], end[1])
